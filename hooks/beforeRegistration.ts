@@ -4,7 +4,7 @@ import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 export function beforeRegistration(config, store) {
   const VSF_PAYPAL_CODE = 'paypal_express'
 
-  if (!isServer && config.hasOwnProperty('paypal') && config.paypal.addJsToGlobalHead && window.paypalScriptLoaded === undefined) {
+  if (!isServer && config.hasOwnProperty('paypal') && config.paypal.addJsToGlobalHead && (window as any).paypalScriptLoaded === undefined) {
     const storeView = currentStoreView()
     const { currencyCode } = storeView.i18n
     const clientId = config.paypal.hasOwnProperty('clientId') ? config.paypal.clientId : ''
@@ -12,7 +12,7 @@ export function beforeRegistration(config, store) {
     const sdkUrl = `https://www.paypal.com/sdk/js?client-id=${clientId}&currency=${currencyCode}&disable-funding=${disabledPaymentOptions}`
     var script = document.createElement('script')
     script.setAttribute('src', sdkUrl)
-    document.head.appendChild(script)
-    window.paypalScriptLoaded = true
+    document.head.appendChild(script);
+    (window as any).paypalScriptLoaded = true
   }
 }
